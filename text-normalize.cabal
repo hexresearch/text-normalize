@@ -1,0 +1,71 @@
+name:                text-normalize
+version:             0.1.0.0
+
+license:             AllRightsReserved
+copyright:           2017 Hexresearch Team
+build-type:          Simple
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:
+    Data.Text.Histogramm
+    Data.Text.Normalize
+    Data.Text.Normalize.Chunk
+    Data.Text.Normalize.Lexeme
+    Data.Text.Normalize.Sentence
+    Data.Text.Normalize.Stem
+    Data.Text.Normalize.StopWord
+    Data.Text.Normalize.Token
+  build-depends:
+      base                  >= 4.7  && < 5
+    , attoparsec            >= 0.13 && < 0.14
+    , containers            >= 0.5  && < 0.6
+    , mtl                   >= 2.2  && < 2.3
+    , snowball              >= 1.0  && < 1.1
+    , split                 >= 0.2  && < 0.3
+    , text                  >= 1.2  && < 1.3
+    , unordered-containers  >= 0.2  && < 0.3
+    , vector                >= 0.11 && < 0.12
+
+  default-language:    Haskell2010
+  default-extensions:
+    DeriveGeneric
+    FlexibleContexts
+    FlexibleInstances
+    LambdaCase
+    OverloadedLists
+    OverloadedStrings
+    RecordWildCards
+    ScopedTypeVariables
+    TupleSections
+
+test-suite text-normalize-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  other-modules:
+    Data.Text.HistogrammSpec
+    Data.Text.NormalizeSpec
+  build-depends:
+     base
+   , text-normalize
+   , containers
+   , hspec
+   , HUnit
+   , text
+   , vector
+   , snowball
+
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+  default-extensions:
+    DeriveGeneric
+    FlexibleContexts
+    FlexibleInstances
+    LambdaCase
+    OverloadedLists
+    OverloadedStrings
+    RecordWildCards
+    ScopedTypeVariables
+    TupleSections
