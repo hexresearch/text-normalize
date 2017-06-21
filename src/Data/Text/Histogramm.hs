@@ -12,6 +12,7 @@ module Data.Text.Histogramm(
   , dotHist
   , lengthHist
   , makeGaussKernell
+  , nullHist
   ) where
 
 import Data.Map.Strict (Map)
@@ -91,3 +92,7 @@ lengthHist (Histogramm ma) =
 makeGaussKernell :: (a -> a -> a) -> (Double -> a -> a) -> (a -> Double) -> (a -> a -> Double)
 makeGaussKernell add scale len a b =
   exp $ negate $ 0.5 * (len (add a (scale (-1) b)) ** 2)
+
+-- | Return 'True' if histogramm doesn't contains any value
+nullHist :: Histogramm a -> Bool
+nullHist (Histogramm values) = M.null values
