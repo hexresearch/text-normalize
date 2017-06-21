@@ -2,6 +2,7 @@ resolver: lts-8.11
 
 packages:
   - '.'
+  - 'examples/01'
 
 # Dependency packages to be pulled from upstream that are not in the resolver
 extra-deps:
