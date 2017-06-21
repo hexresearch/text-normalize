@@ -19,6 +19,7 @@ import Data.Monoid
 import Data.Text (Text)
 import GHC.Generics
 
+import qualified Data.Foldable as F
 import qualified Data.List as L
 import qualified Data.List.Split as L
 import qualified Data.Map.Strict as M
@@ -30,12 +31,15 @@ newtype Histogramm a = Histogramm { unHistogramm :: Map a Double }
   deriving (Show, Eq, Ord, Generic)
 
 -- | Creates histogramm of words for a given chunk.
-getHistogramm :: Ord a => [a] -> Histogramm a
-getHistogramm chunk = normalizeHist $ removeNoizyWords 2 $ histFromList chunk
+getHistogramm :: (Foldable f, Ord a)
+  => Double -- ^ Threshold, values that less than the value are dropped
+  -> f a -- ^ Input data
+  -> Histogramm a
+getHistogramm th chunk = normalizeHist $ removeNoizyWords th $ histFromList chunk
 
 -- | Creates a histogramm out of list of values.
-histFromList :: Ord a => [a] -> Histogramm a
-histFromList xs = Histogramm $ M.fromList $ fmap getCount $ L.group $ L.sort xs
+histFromList :: (Foldable f, Ord a) => f a -> Histogramm a
+histFromList = Histogramm . M.fromList . fmap getCount . L.group . L.sort . F.toList
   where
     getCount xs = count `seq` (token, count)
       where
@@ -44,13 +48,13 @@ histFromList xs = Histogramm $ M.fromList $ fmap getCount $ L.group $ L.sort xs
 
 -- | Creates histogramm of N-letters. It slides along the words
 -- with overlapping windows by N-letters and creates the histogramm out of them.
-getSlidingWindowHistogramm :: Int -> [Text] -> Histogramm Text
+getSlidingWindowHistogramm :: forall f . Foldable f => Int -> f Text -> Histogramm Text
 getSlidingWindowHistogramm n chunk =
   normalizeHist $ removeNoizyWords 10 $
   histFromList $ fmap T.pack $ L.divvy n 1 $ getTextAsList chunk
   where
-    getTextAsList :: [Text] -> String
-    getTextAsList chunk = T.unpack $ T.concat chunk
+    getTextAsList :: f Text -> String
+    getTextAsList = T.unpack . T.concat . F.toList
 
 -- | Removes all words that have score less than given value.
 removeNoizyWords :: Double -> Histogramm a -> Histogramm a
