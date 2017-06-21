@@ -1,11 +1,12 @@
 -- | Token definition and manipulation
 module Data.Text.Normalize.Token(
     Token(..)
-  , isTokenWord
-  , isTokenMarkup
-  , tokenValue
   , filterWords
+  , isTokenMarkup
+  , isTokenWord
+  , leaveWords
   , mapWord
+  , tokenValue
   ) where
 
 import Data.Text (Text)
@@ -50,3 +51,7 @@ filterWords f = filter $ \case
 mapWord :: (Text -> Text) -> Token -> Token
 mapWord f (TokenWord v) = TokenWord (f v)
 mapWord _ w = w
+
+-- | Leave only words in stream, drop punctuation
+leaveWords :: [Token] -> [Text]
+leaveWords = fmap tokenValue . filter isTokenWord
