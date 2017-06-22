@@ -55,4 +55,4 @@ normalizeWords :: Int -- ^ Size of chunk in words
 normalizeWords chunkSize = merge . normalize chunkSize
   where
     merge :: [[Token]] -> [[Text]]
-    merge = fmap (fmap tokenValue . filter isTokenWord)
+    merge = fmap leaveWords

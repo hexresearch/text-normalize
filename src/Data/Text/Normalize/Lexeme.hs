@@ -23,12 +23,18 @@ lexemParser = spaces *> many (markup <|> word)
 
     markup :: Parser Token
     markup = do
-      w <- takeWhile1 (\c -> not (isSpace c) && isPunctuation c)
+      w <- takeWhile1 (\c -> not (isSpace c) && isMarkup c)
       _ <- spaces
       pure $ TokenMarkup w
 
     word :: Parser Token
     word = do
-      w <- takeWhile1 (\c -> not $ isSpace c || isPunctuation c)
+      w <- takeWhile1 (\c -> not $ isSpace c || isMarkup c)
       _ <- spaces
       pure $ TokenWord w
+
+    isMarkup :: Char -> Bool
+    isMarkup c = isPunctuation c
+      || c == '+' || c == '-' || c == '^' || c == '=' || c == '<' || c == '>'
+      || c == '~' || c == '|' || c == '#' || c == '@' || c == '$' || c == '*'
+      || c == '/' || c == '\\' 

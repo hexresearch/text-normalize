@@ -16,6 +16,6 @@ main = do
 
 processDoc :: FilePath -> IO ()
 processDoc p = do
-  chunks <- normalizeSimple 100 <$> T.readFile p
+  chunks <- normalizeWords 100 <$> T.readFile p
   putStrLn "Normalized chunks:"
   traverse_ (T.putStrLn . T.unwords) chunks
