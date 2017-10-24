@@ -26,7 +26,7 @@ library
     , split                 >= 0.2  && < 0.3
     , text                  >= 1.2  && < 1.3
     , unordered-containers  >= 0.2  && < 0.3
-    , vector                >= 0.11 && < 0.12
+    , vector                >= 0.11 && < 0.13
 
   default-language:    Haskell2010
   default-extensions:
